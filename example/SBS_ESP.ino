@@ -8,7 +8,7 @@ char pass[] = "networkPass";
 
 char mqttAddress[] = "test.mosquitto.org";
 String mqttTopicBase = "/test/kundarsa/battery/" + WiFi.macAddress() + "/";
-String thisVersion = "2018/05/25-19:15";
+String thisVersion = "2018/05/25-22:55";
 
 MQTTClient client;
 SBS battery = SBS(0x0b);
@@ -26,6 +26,7 @@ void setup() {
   client.onMessage(messageReceived);
   connect();
   longMillis = millis() + 5000;
+  shortMillis = millis() + 4000;
 }
 
 void loop() {
@@ -36,8 +37,8 @@ void loop() {
 
   if (millis() - shortMillis >= 60000) {
     shortMillis = millis();
-    client.publish(battery.commands[10].slaveFunction, (String)battery.sbsReadInt(battery.commands[10].code));
-    client.publish(battery.commands[13].slaveFunction, (String)battery.sbsReadInt(battery.commands[13].code));
+    client.publish(mqttTopicBase + battery.commands[10].slaveFunction, (String)battery.sbsReadInt(battery.commands[10].code));
+    client.publish(mqttTopicBase + battery.commands[13].slaveFunction, (String)battery.sbsReadInt(battery.commands[13].code));
     publishTemp();
   }
 
@@ -66,11 +67,11 @@ void update(String file) {
 
 void dumpAll() {
   for(int i = 1; i < 38; i++) {
-    if(battery.commands[i].bytes == 4) //broken
+    if(battery.commands[i].bytes == 4) //1 is broken
       client.publish(mqttTopicBase + "rawData/" + battery.commands[i].slaveFunction, (String)battery.sbsReadByte(battery.commands[i].code));
-    else if(battery.commands[i].bytes == 2) //works
+    else if(battery.commands[i].bytes == 2) //2 works fine
       client.publish(mqttTopicBase + "rawData/" + battery.commands[i].slaveFunction, (String)battery.sbsReadInt(battery.commands[i].code));
-    else if(battery.commands[i].bytes == 3) { //broken
+    else if(battery.commands[i].bytes == 3) { //0 (string) is broken
       int n = battery.sbsReadStringSize(battery.commands[i].code);
       if(n>0) {
         char text[++n];
