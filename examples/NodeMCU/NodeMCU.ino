@@ -45,7 +45,7 @@ void printBatteryRegisters() {
       Serial.println((int)battery.sbsReadInt(battery.commands[i].code));
     }
     else if(battery.commands[i].type == "number") { // only used for SerialNumber register
-      Serial.println((int)battery.sbsReadInt(battery.commands[i].code));
+      Serial.println((uint)battery.sbsReadInt(battery.commands[i].code));
     }
     else if(battery.commands[i].type == "0.1K") { // only used for temperature register
       Serial.print(((int)battery.sbsReadInt(battery.commands[i].code) / 10 - 273.15) * 1.8 + 32); //register is in kelvin, this math changes to C, and converts to F
