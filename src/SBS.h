@@ -22,7 +22,7 @@ public:
     b = 2
   };
  */
-  SBS(uint8_t address);
+  SBS(uint8_t address, char sda, char scl);
   byte sbsReadByte(uint8_t command);
   short sbsReadInt(uint8_t command);
   uint8_t sbsReadStringSize(uint8_t command);

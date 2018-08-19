@@ -4,7 +4,7 @@ SBS::commandSet commands[38];
 uint8_t smbusAddress;
 
 
-SBS::SBS(uint8_t address) {
+SBS::SBS(uint8_t address, char sda, char scl) {
   //              Slave Function        Address,Writable?, byte count
   commands[0]  = {"ManufacturerAccess",     0x00, true,  1, "word"};
   commands[1]  = {"RemainingCapacityAlarm", 0x01, true,  2, "mAh"};
@@ -48,7 +48,7 @@ SBS::SBS(uint8_t address) {
 
   smbusAddress = address;
   
-  Wire.begin();
+  Wire.begin(sda, scl);
   Wire.setClockStretchLimit(35000);
   Wire.setClock(40000);
 }
