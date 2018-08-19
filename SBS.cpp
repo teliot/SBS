@@ -101,9 +101,3 @@ void SBS::sbsReadString(char *buf, uint8_t stringSize) {
   }
 }
 
-
-
-float SBS::getFahrenheit() {
-  return ((float)sbsReadInt(0x08)/10 - 273.15) * 1.8 + 32;
-}
-

@@ -57,9 +57,9 @@ void printBatteryRegisters() {
     }
     else if(battery.commands[i].slaveFunction == "ManufactureDate") { // only one date register
 	  int raw = (int)battery.sbsReadInt(battery.commands[i].code);
-	  Serial.print((raw >> 5 ) & 0xF); Serial.print("/");
-	  Serial.print(raw & 0xF); Serial.print("/");
-      Serial.println((raw >> 9 ) + 1980);
+	  Serial.print((raw >> 5 ) & 0xF); Serial.print("/"); // month
+	  Serial.print(raw & 0xF); Serial.print("/"); // day
+      Serial.println((raw >> 9 ) + 1980); // year
     }
     else
     Serial.println("?");
