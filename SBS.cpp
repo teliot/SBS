@@ -78,26 +78,18 @@ short SBS::sbsReadInt(uint8_t command) {
   return 0;
 }
 
-
-//TODO: strings can be a max of 32 chars so just assume that +1 and toss in a /n
-uint8_t SBS::sbsReadStringSize(uint8_t command) {
-  Wire.beginTransmission(command);
+void SBS::sbsReadString(char str[], uint8_t command) {
+  str[0] = (char)0;
+  int n;
+  Wire.beginTransmission(smbusAddress);
   Wire.write(command);
   if(Wire.endTransmission(false) == 0) {
-    Wire.requestFrom(smbusAddress, 1, false);
-    int n = Wire.read();
-    if(n>0)
-      return Wire.read();
-    else
-      Wire.endTransmission();
-      return 0;
-  }
-  return 0;
-}
-
-void SBS::sbsReadString(char *buf, uint8_t stringSize) {
-  for(int i = 0; i < stringSize; i++) {
-    buf[i] = Wire.read();
+    Wire.requestFrom(smbusAddress, 33, true); //hack, instead of 1, request max char[] size per docs
+    n = Wire.read();
+	//Wire.requestFrom(smbusAddress, n, false); //broken, not sure why
+	for(int i = 0; i < n; i++)
+	  str[i] = (char)Wire.read();
+    str[n] = (char)0;
   }
 }
 

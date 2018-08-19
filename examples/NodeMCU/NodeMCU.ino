@@ -61,6 +61,12 @@ void printBatteryRegisters() {
 	  Serial.print(raw & 0xF); Serial.print("/"); // day
       Serial.println((raw >> 9 ) + 1980); // year
     }
+	else if(battery.commands[i].type == "string") { // char array, library is broken on this, but hack seems to work
+	  char s[33]; //max string is 32 chars + null terminator
+	  s[32] = (char)0; //for bof safety
+	  battery.sbsReadString(s, battery.commands[i].code);
+	  Serial.println(s);
+	}
     else
     Serial.println("?");
   }

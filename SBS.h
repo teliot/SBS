@@ -26,7 +26,7 @@ public:
   byte sbsReadByte(uint8_t command);
   short sbsReadInt(uint8_t command);
   uint8_t sbsReadStringSize(uint8_t command);
-  void sbsReadString(char *buf, uint8_t stringSize);
+  void sbsReadString(char str[], uint8_t command);
 private:
 };
 
